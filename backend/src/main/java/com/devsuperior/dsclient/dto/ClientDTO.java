@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.Instant;
 
 import com.devsuperior.dsclient.entities.Client;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class ClientDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -12,7 +13,6 @@ public class ClientDTO implements Serializable{
 	private String name;
 	private String cpf;
 	private Double income;
-	
 	private Instant birthDate;
 	private Integer children;
 
