@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +29,7 @@ public class ClientService {
 	
 	@Transactional(readOnly = true)
 	public ClientDTO findById(Long id) {
-		Optional<Client> obj = repository.findById(id);
+		Optional<Client> obj = repository.findById(id);// findById vai no banco de dados a tras os dados
 		Client entity = obj.orElseThrow(()-> new ResouceNotFoundException("Entity not found "));
 	return new ClientDTO(entity);
 	}
@@ -45,5 +47,32 @@ public class ClientService {
 	    return new ClientDTO(entity);
 		
 	}
+
+	@Transactional
+	public ClientDTO update(Long id, ClientDTO dto) {
+		try {
+		Client entity = repository.getOne(id);// O getOne nao vai no banco de dados, ele instancia um obj provisório só quando for salvar ele vai no banco 
+		entity.setName(dto.getName());
+		entity.setCpf(dto.getCpf());
+		entity.setIncome(dto.getIncome());
+		entity.setBirthDate(dto.getBirthDate());
+		entity.setChildren(dto.getChildren());
+		entity = repository.save(entity);
+		return new ClientDTO(entity);
+		}
+		catch(EntityNotFoundException e ) {
+			throw new ResouceNotFoundException("Id not found " + id);
+			
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
