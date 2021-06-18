@@ -1,14 +1,16 @@
 package com.devsuperior.dsclient.services;
 
-import java.util.List;
+
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,9 +27,9 @@ public class ClientService {
 	public ClientRepository repository;
 
 	@Transactional(readOnly = true)
-	public List<ClientDTO> findAll() {
-		List<Client> list = repository.findAll();
-		return list.stream().map(x -> new ClientDTO(x)).collect(Collectors.toList());
+	public Page<ClientDTO> findAllPaged(PageRequest pageResquest) {
+		Page<Client> list = repository.findAll(pageResquest);
+		return list.map(x -> new ClientDTO(x));
 	}
 	
 	@Transactional(readOnly = true)
